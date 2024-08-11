@@ -1,31 +1,39 @@
-def binary_search(arr, target):
-    # Base case: If the array is empty, return -1 (not found)
-    if len(arr) == 0:
-        return -1
+def binaere_suche(arr, ziel):
+    # Start und Ende des Bereichs festlegen
+    links = 0
+    rechts = len(arr) - 1
 
-    # Find the middle index of the array
-    mid = len(arr) // 2
+    while links <= rechts:
+        # Divide: Mittleren Index berechnen
+        mitte = (links + rechts) // 2
 
-    # Compare the target element with the middle element of the array
-    if arr[mid] == target:
-        # If the target element is found at the middle index, return the index
-        return mid
+        # Conquer: Prüfen, ob das Ziel am mittleren Index liegt
+        if arr[mitte] == ziel:
+            return mitte  # Ziel gefunden, Index zurückgeben
 
-    # Divide the array into two halves: left and right
-    left = arr[:mid]
-    right = arr[mid + 1:]
+        # Conquer: Wenn das Ziel größer ist, suche im rechten Teil weiter
+        elif arr[mitte] < ziel:
+            links = mitte + 1
 
-    # Recursively search in the appropriate half
-    if target < arr[mid]:
-        # If the target element is less than the middle element, search in the left half
-        return binary_search(left, target)
-    else:
-        # If the target element is greater than or equal to the middle element, search in the right half
-        return mid + 1 + binary_search(right, target)
+        # Conquer: Wenn das Ziel kleiner ist, suche im linken Teil weiter
+        else:
+            rechts = mitte - 1
+
+    # Merge: Ziel nicht gefunden, -1 zurückgeben
+    return -1
 
 
-# Example usage:
-arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-target = 5
-result = binary_search(arr, target)
-print(result)  # Output: 4
+# Beispiel-Liste (muss sortiert sein)
+array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+
+# Zielwert, den wir suchen möchten
+zielwert = 17
+
+# Binäre Suche ausführen
+ergebnis = binaere_suche(array, zielwert)
+
+# Ergebnis ausgeben
+if ergebnis != -1:
+    print(f"Zielwert {zielwert} gefunden an Index {ergebnis}.")
+else:
+    print(f"Zielwert {zielwert} nicht in der Liste gefunden.")
