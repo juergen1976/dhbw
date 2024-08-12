@@ -7,19 +7,19 @@ class WeatherApp extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = `
             <style>
-                /* Stylings hier hinterlegen */
+                /* TODO: Stylings hier hinterlegen */
             </style>
             <div class="container">
-                /* HTML hier hinterlegen */
+                /* TODO: HTML hier hinterlegen */
             </div>
         `;
         this.shadowRoot.getElementById('searchButton').addEventListener('click', () => {
-            // Implementierung
+            // TODO Implementierung
         });
 
         var aktuellButton = this.shadowRoot.getElementById('aktuellButton');
         aktuellButton.addEventListener('click', () => {
-            // Implementierung
+            // TODO Implementierung
         });
 
         this.fetchWeather = this.fetchWeather.bind(this);
