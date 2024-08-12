@@ -8,36 +8,36 @@ class WeatherApp extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 .container {
-                    font-family: Arial, sans-serif;
+                    max-width: 400px;
+                    margin: 0 auto;
+                    text-align: center;
                     padding: 20px;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                    width: 300px;
+                    background-color: rgba(255, 255, 255, 0.5); /* Set the background color to be transparent */
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Adjust the alpha value here for the box shadow transparency */
+                    margin-top: 105px;
                 }
                 h1 {
                     font-size: 24px;
-                    margin-bottom: 10px;
                 }
+
                 input[type="text"] {
-                    width: calc(100% - 22px);
-                    padding: 8px;
-                    margin-bottom: 10px;
-                    border-radius: 5px;
+                    width: 90%;
+                    padding: 10px;
+                    margin: 10px 0;
                     border: 1px solid #ccc;
+                    border-radius: 5px;
                 }
                 button {
-                    padding: 8px 12px;
-                    margin-right: 5px;
+                    background-color: #1c1cd8;
+                    color: #fff;
+                    border: none;
+                    padding: 10px 20px;
                     border-radius: 5px;
-                    border: 1px solid #ccc;
                     cursor: pointer;
-                    background-color: #f0f0f0;
                 }
                 .weather-info {
                     margin-top: 20px;
-                }
-                h2, p {
-                    margin: 5px 0;
                 }
             </style>
             <div class="container">
