@@ -52,143 +52,116 @@ class WeatherApp extends HTMLElement {
                 </div>
             </div>
         `;
+        this.shadowRoot.getElementById('searchButton').addEventListener('click', () => {
+            const location = this.shadowRoot.getElementById('locationInput').value;
+            if (location) {
+                this.fetchWeather(location);
+            }
+        });
+
+        var aktuellButton = this.shadowRoot.getElementById('aktuellButton');
+        aktuellButton.addEventListener('click', () => {
+            //  set cursor to wait
+            aktuellButton.style.cursor = 'wait';
+            aktuellButton.disabled = true;
+        
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(this.showPosition, this.showError);
+            } else {
+                document.getElementById('weatherData').innerHTML = "Geolocation is not supported by this browser.";
+            }
+        });
+
+        this.fetchWeather = this.fetchWeather.bind(this);
+        this.fetchLocalWeather = this.fetchLocalWeather.bind(this);
+        this.showPosition = this.showPosition.bind(this);
+        this.showError = this.showError.bind(this);
     }
 
-    // Getter and setter for location input
-    get locationInput() {
-        return this.shadowRoot.getElementById('locationInput').value;
+    fetchWeather(location) {
+        const url = `${apiUrl}?q=${location}&appid=${apiKey}&units=metric`;
+        var searchButton = this.shadowRoot.getElementById('searchButton');
+        var locationElement = this.shadowRoot.getElementById('location');
+        var temperatureElement = this.shadowRoot.getElementById('temperature');
+    
+        //  set cursor to wait
+        searchButton.style.cursor = 'wait';
+        searchButton.disabled = true;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(jsonData => {
+                locationElement.innerText = jsonData.name;
+                temperatureElement.innerText = `${Math.round(jsonData.main.temp)}°C`;
+            })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+            })
+            .finally(() => {
+                searchButton.style.cursor = 'pointer';
+                searchButton.disabled  = false;
+            });
+    }
+    
+    
+    // Aktuelle Position mittels Geolocation API
+    showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred.");
+                break;
+        }
+    }
+    
+    fetchLocalWeather(lat, lon) {
+        const url = `${apiUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+        var locationElement = this.shadowRoot.getElementById('location');
+        var temperatureElement = this.shadowRoot.getElementById('temperature');
+        var descriptionElement = this.shadowRoot.getElementById('description');
+        var aktuellButton = this.shadowRoot.getElementById('aktuellButton');
+    
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                locationElement.innerText = data.name;
+                temperatureElement.innerText = `${Math.round(data.main.temp)}°C`;
+                descriptionElement.innerText = data.weather[0].description;
+            })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+            })
+            .finally(() => {
+                aktuellButton.style.cursor = 'pointer';
+                aktuellButton.disabled = false;
+            });
     }
 
-    set locationInput(value) {
-        this.shadowRoot.getElementById('locationInput').value = value;
+    showPosition(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        this.fetchLocalWeather(lat, lon);
     }
 
-    // Getter and setter for location display
-    get location() {
-        return this.shadowRoot.getElementById('location').innerText;
-    }
-
-    set location(value) {
-        this.shadowRoot.getElementById('location').innerText = value;
-    }
-
-    // Getter and setter for temperature display
-    get temperature() {
-        return this.shadowRoot.getElementById('temperature').innerText;
-    }
-
-    set temperature(value) {
-        this.shadowRoot.getElementById('temperature').innerText = value;
-    }
-
-    // Getter and setter for description display
-    get description() {
-        return this.shadowRoot.getElementById('description').innerText;
-    }
-
-    set description(value) {
-        this.shadowRoot.getElementById('description').innerText = value;
-    }
-
-    // Access buttons directly if needed
-    get searchButton() {
-        return this.shadowRoot.getElementById('searchButton');
-    }
-
-    get aktuellButton() {
-        return this.shadowRoot.getElementById('aktuellButton');
-    }
 }
 
-// Define the new element
+// Define the new element and get it
 customElements.define('weather-app', WeatherApp);
-
 const weatherApp = document.querySelector('weather-app');
 
 
-weatherApp.searchButton.addEventListener('click', () => {
-    const location = weatherApp.locationInput;
-    if (location) {
-        fetchWeather(location);
-    }
-});
 
 
-function fetchWeather(location) {
-    const url = `${apiUrl}?q=${location}&appid=${apiKey}&units=metric`;
-
-    //  set cursor to wait
-    weatherApp.searchButton.style.cursor = 'wait';
-    weatherApp.searchButton.disabled = true;
-    
-    fetch(url)
-        .then(response => response.json())
-        .then(jsonData => {
-            weatherApp.location = jsonData.name;
-            weatherApp.temperature = `${Math.round(jsonData.main.temp)}°C`;
-        })
-        .catch(error => {
-            console.error('Error fetching weather data:', error);
-        })
-        .finally(() => {
-            weatherApp.temperature = `${Math.round(jsonData.main.temp)}°C`;
-            weatherApp.searchButton.style.cursor = 'pointer';
-            weatherApp.searchButton.disabled  = false;
-        });
-}
 
 
-// Aktuelle Position mittels Geolocation API
-function showError(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            alert("User denied the request for Geolocation.");
-            break;
-        case error.POSITION_UNAVAILABLE:
-            alert("Location information is unavailable.");
-            break;
-        case error.TIMEOUT:
-            alert("The request to get user location timed out.");
-            break;
-        case error.UNKNOWN_ERROR:
-            alert("An unknown error occurred.");
-            break;
-    }
-}
 
-function showPosition(position) {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-    fetchLocalWeather(lat, lon);
-}
 
-weatherApp.aktuellButton.addEventListener('click', () => {
-    //  set cursor to wait
-    weatherApp.aktuellButton.style.cursor = 'wait';
-    weatherApp.aktuellButton.disabled = true;
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
-    } else {
-        document.getElementById('weatherData').innerHTML = "Geolocation is not supported by this browser.";
-    }
-});
-
-function fetchLocalWeather(lat, lon) {
-    const url = `${apiUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            weatherApp.location = data.name;
-            weatherApp.temperature = `${Math.round(data.main.temp)}°C`;
-            weatherApp.description = data.weather[0].description;
-        })
-        .catch(error => {
-            console.error('Error fetching weather data:', error);
-        })
-        .finally(() => {
-            weatherApp.aktuellButton.style.cursor = 'pointer';
-            weatherApp.aktuellButton.disabled = false;
-        });
-}
