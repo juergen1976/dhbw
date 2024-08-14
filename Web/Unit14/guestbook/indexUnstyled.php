@@ -7,8 +7,8 @@
 <body>
     <h1>Guestbook</h1>
     <form method="POST">
-        <input type="text" name="name" placeholder="Your Name" required><br>
-        <textarea name="message" placeholder="Your Message" required></textarea><br>
+        <input type="text" name="name" placeholder="Ihr Name" required><br>
+        <textarea name="message" placeholder="Ihre Nachricht" required></textarea><br>
         <button type="submit">Submit</button>
     </form>
     
