@@ -1,21 +1,26 @@
-def is_safe(board, row, col):
-    # Check if it's possible to place a queen in the current position
+def is_valid(board, row, col):
+    # TODO: Implement the is_valid function
     pass
 
 def n_queens(n):
-    board = [[False] * n for _ in range(n)]
-    solutions = []
-    # Try placing queens one by one
-    for col in range(n):
-        if is_safe(board, 0, col):
-            board[0][col] = True
-            # Recursively place the remaining queens
-            if n > 1:
-                for sol in n_queens(n-1):
-                    solutions.append([0] + sol)
-            else:
-                solutions.append([0, col])
-            board[0][col] = False # backtrack
-    return solutions
+    def place_queens(n, row, board):
+        if row == n:
+            result.append(board[:])
+            return
+        for col in range(n):
+            if is_valid(board, row, col):
+                board[row] = col
+                place_queens(n, row + 1, board)
 
-n_queens(4)
+    result = []
+    place_queens(n, 0, [-1] * n)
+    return result
+
+def print_board(sol):
+    # TODO: Implement the print_board function
+    pass
+
+
+solution = n_queens(4)
+print (solution)
+print_board(solution[0])

@@ -32,4 +32,5 @@ def print_board(sol):
 
 
 solution = n_queens(4)
+print (solution)
 print_board(solution[0])
