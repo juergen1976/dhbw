@@ -12,10 +12,14 @@ class SimpleCounter extends HTMLElement {
         const container = document.createElement('div');
         const countDisplay = document.createElement('span');
         const incrementButton = document.createElement('button');
+        const restButton = document.createElement('button');
 
+        const decrementButton = document.createElement('button');
         // Set text content
         countDisplay.textContent = this.count;
         incrementButton.textContent = 'Increment';
+        decrementButton.textContent = 'Decrement';
+        restButton.textContent = 'Reset';
 
         // Add styles
         const style = document.createElement('style');
@@ -46,11 +50,22 @@ class SimpleCounter extends HTMLElement {
         // Append elements to the shadow DOM
         container.appendChild(countDisplay);
         container.appendChild(incrementButton);
+        container.appendChild(decrementButton);
+        container.appendChild(restButton);
         this.shadowRoot.append(style, container);
 
         // Event listener to handle incrementing
         incrementButton.addEventListener('click', () => {
             this.count++;
+            countDisplay.textContent = this.count;
+        });
+        decrementButton.addEventListener('click', () => {
+            this.count--;
+            countDisplay.textContent = this.count;
+        });
+
+        restButton.addEventListener('click', () => {
+            this.count = 0;
             countDisplay.textContent = this.count;
         });
     }
