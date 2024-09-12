@@ -9,8 +9,8 @@ def solve_knapsack():
         return
 
     # Define data
-    sizes = [5, 9, 7]        # Sizes of bread, meat, beer
-    popularities = [10, 15, 8] # Popularity values of bread, meat, beer
+    sizes = [1,1,1, 3,3,3, 7,7,7]        # Sizes of bread, meat, beer
+    popularities = [3,3,3, 10,10,10, 26,26,26] # Popularity values of bread, meat, beer
     max_capacity = 19         # Max space available
 
     num_items = len(sizes)
